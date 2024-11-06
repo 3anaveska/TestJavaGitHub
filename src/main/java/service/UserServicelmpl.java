@@ -5,7 +5,6 @@ import model.User;
 import dao.UserDaoJDBCImpl;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserServicelmpl extends UserDaoJDBCImpl implements UserService {

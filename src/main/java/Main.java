@@ -1,6 +1,3 @@
-import dao.UserDao;
-import dao.UserDaoJDBCImpl;
-import model.User;
 import service.UserService;
 import service.UserServicelmpl;
 import util.Util;

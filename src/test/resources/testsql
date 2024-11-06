@@ -1,5 +1,0 @@
-#insert into user (name, lastName, age) values('Dima', 'Zheleznyak', 22);
-#select name, age from users where id = 2;
-#update users set name = 'Dima', age = 24 where id = 1;
-#select * from user;
-delete from user
