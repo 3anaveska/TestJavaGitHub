@@ -1,13 +1,16 @@
-import service.UserService;
-import service.UserServicelmpl;
-import util.Util;
+package jm.task.core.jdbc;
+
+import jm.task.core.jdbc.service.UserService;
+import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
 
 import java.sql.SQLException;
 
 public class Main {
+    private final static UserService UserService = new UserServiceImpl();
     public static void main(String[] args) throws SQLException {
-        Util.getConnection();
-        UserService UserService = new UserServicelmpl();
+        //Util.getConnection();
+
 
         UserService.createUsersTable();
 

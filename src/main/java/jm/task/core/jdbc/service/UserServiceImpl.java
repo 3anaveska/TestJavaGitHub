@@ -1,34 +1,38 @@
-package service;
+package jm.task.core.jdbc.service;
 
-import dao.UserDao;
-import model.User;
-import dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.dao.UserDao;
+import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 
-import java.sql.*;
 import java.util.List;
 
-public class UserServicelmpl extends UserDaoJDBCImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     UserDao userDao = new UserDaoJDBCImpl();
 
-    public void createUsersTable() throws SQLException {
+    @Override
+    public void createUsersTable() {
         userDao.createUsersTable();
     }
 
+    @Override
     public void dropUsersTable() {
         userDao.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
+    @Override
+    public void saveUser(String name, String lastName, byte age) {
         userDao.saveUser(name, lastName, age);
         System.out.println("User с именем – " + name + " добавлен в базу данных");
     }
 
-    public void removeUserById(long id) throws SQLException {
+    @Override
+    public void removeUserById(long id) {
         userDao.removeUserById(id);
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    @Override
+    public List<User> getAllUsers() {
         List<User> users =  userDao.getAllUsers();
         for (User user : users) {
             System.out.println(user);
@@ -36,6 +40,7 @@ public class UserServicelmpl extends UserDaoJDBCImpl implements UserService {
         return users;
     }
 
+    @Override
     public void cleanUsersTable() {
         userDao.cleanUsersTable();
     }
