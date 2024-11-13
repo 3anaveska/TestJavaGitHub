@@ -37,22 +37,48 @@ public class UserDaoJDBCImpl implements UserDao {
     }
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO user (NAME, LASTNAME, AGE) VALUES ( ?, ?, ? )")) {
             connection.setAutoCommit(false);
-            statement.executeUpdate("INSERT INTO user (NAME, LASTNAME, AGE) VALUES ('" + name + "', '" + lastName + "', " + age + ")");
+            statement.setString(1, name);
+            statement.setString(2, lastName);
+            statement.setByte(3, age);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     @Override
     public void removeUserById(long id) {
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM USER WHERE id = ?")) {
             connection.setAutoCommit(false);
-            statement.executeUpdate("DELETE FROM user WHERE ID = " + id + " ");
+            statement.setLong(1, id);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     @Override
@@ -76,7 +102,18 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.executeUpdate("TRUNCATE TABLE user");
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
