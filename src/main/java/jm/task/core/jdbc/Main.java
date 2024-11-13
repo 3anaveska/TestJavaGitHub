@@ -9,8 +9,6 @@ import java.sql.SQLException;
 public class Main {
     private final static UserService UserService = new UserServiceImpl();
     public static void main(String[] args) throws SQLException {
-        //Util.getConnection();
-
 
         UserService.createUsersTable();
 
