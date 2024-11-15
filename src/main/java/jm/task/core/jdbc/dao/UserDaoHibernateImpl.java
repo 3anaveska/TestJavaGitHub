@@ -7,11 +7,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
-/*public class UserDaoHibernateImpl extends Util implements UserDao {
+public class UserDaoHibernateImpl implements UserDao {
 
     public UserDaoHibernateImpl() {
 
@@ -24,7 +23,7 @@ import java.util.List;
 
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            String sql = "CREATE TABLE IF NOT EXISTS users " +
+            String sql = "CREATE TABLE IF NOT EXISTS user " +
                     "(id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, " +
                     "age TINYINT NOT NULL)";
@@ -44,10 +43,11 @@ import java.util.List;
     @Override
     public void dropUsersTable() {
         Transaction transaction = null;
-        try (Session session = getSessionFactory().openSession()) {
+        try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             String sql = "DROP TABLE IF EXISTS user";
-            Query query = (Query) session.createSQLQuery(sql).addEntity(User.class);
+            Query query = session.createSQLQuery(sql).addEntity(User.class);
+            query.executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
@@ -59,22 +59,50 @@ import java.util.List;
     }
 
     @Override
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
-
+    public void saveUser(String name, String lastName, byte age) {
+        Transaction transaction = null;
+        try (Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(new User(name, lastName, age));
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void removeUserById(long id) throws SQLException {
-
+    public void removeUserById(long id) {
+        Transaction transaction = null;
+        try (Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            User user = (User) session.get(User.class, id);
+            session.delete(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
-        return List.of();
+    public List<User> getAllUsers() {
+        try (Session session = Util.getSessionFactory().openSession()) {
+            return session.createQuery("from User").list();
+        }
     }
 
     @Override
     public void cleanUsersTable() {
-
+        Transaction transaction = null;
+        try (Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.createSQLQuery("TRUNCATE TABLE user").executeUpdate();
+            transaction.commit();
+        }
     }
-}*/
+}
