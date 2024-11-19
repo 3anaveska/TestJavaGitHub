@@ -9,7 +9,6 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao = new UserDaoJDBCImpl();
     private final UserDao userDaoHibernate = new UserDaoHibernateImpl();
 
     @Override
@@ -25,7 +24,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(String name, String lastName, byte age) {
         userDaoHibernate.saveUser(name, lastName, age);
-       // System.out.println("User с именем – " + name + " добавлен в базу данных");
     }
 
     @Override
@@ -35,11 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users =  userDaoHibernate.getAllUsers();
-        for (User user : users) {
-            System.out.println(user);
-        }
-        return users;
+        List<User> users;
+        return users = userDaoHibernate.getAllUsers();
     }
 
     @Override
